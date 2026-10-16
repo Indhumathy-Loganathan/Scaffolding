@@ -598,6 +598,21 @@ public class {modelName}
     /// can still be restored inside the temporary test fixture. The
     /// extra source is scoped to the fixture only; the repository's
     /// own <c>NuGet.config</c> deliberately does not include it.
+    /// <para>
+    /// Package source mapping rules are declared explicitly so restore
+    /// succeeds even when a parent (machine- or user-level) NuGet.config
+    /// enables source mapping with patterns that exclude
+    /// <c>Syncfusion.Blazor.Toolkit</c> from <c>dotnet-public</c>, or
+    /// that restrict the framework reference packages to a feed the
+    /// fixture does not list. The local <c>&lt;clear /&gt;</c> disables
+    /// any inherited rules; the per-source patterns then re-establish the
+    /// allow-list for this fixture's feeds without depending on the
+    /// inherited state. Without these rules, NuGet rejects the restore
+    /// with <c>NU1505</c>-style errors ("the required framework
+    /// reference packages don't match any source mapping rule") because
+    /// the locally configured feeds cannot satisfy the packages the
+    /// test project needs.
+    /// </para>
     /// </summary>
     public static readonly string SyncfusionTestNuGetConfig = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <configuration>
@@ -611,6 +626,12 @@ public class {modelName}
   </disabledPackageSources>
   <packageSourceMapping>
     <clear />
+    <packageSource key=""nuget.org"">
+      <package pattern=""Syncfusion.*"" />
+    </packageSource>
+    <packageSource key=""dotnet-public"">
+      <package pattern=""*"" />
+    </packageSource>
   </packageSourceMapping>
 </configuration>";
 }
