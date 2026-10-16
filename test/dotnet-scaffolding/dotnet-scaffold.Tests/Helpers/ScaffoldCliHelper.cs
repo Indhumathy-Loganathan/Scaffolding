@@ -611,12 +611,6 @@ public class {modelName}
   </disabledPackageSources>
   <packageSourceMapping>
     <clear />
-    <packageSource key=""nuget.org"">
-      <package pattern=""Syncfusion.*"" />
-    </packageSource>
-    <packageSource key=""dotnet-public"">
-      <package pattern=""*"" />
-    </packageSource>
   </packageSourceMapping>
 </configuration>";
 }
